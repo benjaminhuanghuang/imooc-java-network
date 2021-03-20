@@ -6,7 +6,7 @@ public class Client {
         final String HOST = "127.0.0.1";
         final int PORT = 8888;
         Socket socket = null;
-
+        BufferedWriter bw = null;
         //
         try {
             socket = new Socket(HOST, PORT);
@@ -15,22 +15,37 @@ public class Client {
                     new InputStreamReader(socket.getInputStream())
             );
 
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
             //
             BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
 
-            String input = consoleReader.readLine();
+            while (true) {
+                String input = consoleReader.readLine();
 
-            // Sent to server
-            bw.write(input + "\n");
-            bw.flush();
+                // Sent to server
+                bw.write(input + "\n");
+                bw.flush();
 
-            String response = br.readLine();
-            System.out.println(response);
+                String response = br.readLine();
+                System.out.println(response);
+
+                if (input.equals("quit")) {
+                    break;
+                }
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (socket != null) {
+                try {
+                    bw.close();    // it will flush and close socket
+                    System.out.println("close socket");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

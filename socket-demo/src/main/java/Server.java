@@ -25,13 +25,17 @@ public class Server {
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
                 //
-                String msg = br.readLine();
-                if (msg != null) {
+                String msg = null;
+                while ((msg = br.readLine()) != null) {
                     System.out.println("Client " + socket.getPort() + " : " + msg);
                     bw.write("Serer:" + msg + "\n");
                     bw.flush();
-                }
 
+                    if(msg.equals("quit")){
+                        System.out.println("Client " + socket.getPort() + " is disconnected" );
+                        break;
+                    }
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -39,6 +43,7 @@ public class Server {
             if (serverSocket != null) {
                 try {
                     serverSocket.close();
+                    System.out.println("close server socket");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
