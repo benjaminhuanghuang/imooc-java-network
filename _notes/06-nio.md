@@ -13,3 +13,13 @@
 
 ## Channel
 ![](./_images/channel.png)
+
+
+
+## BIO to NIO
+Socket -> ServerSocketChannel
+
+ThreadPool -> Selector
+
+
+
